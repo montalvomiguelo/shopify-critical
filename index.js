@@ -3,6 +3,7 @@ const path = require('path')
 const yaml = require('js-yaml')
 const { extractCritical } = require('./lib/extract-critical')
 const inlineCritical = require('./lib/inline-critical')
+const replaceAsset = require('./lib/replace-asset')
 
 const criticalConfigFile = fs.readFileSync('shopify_critical.yml', 'utf8')
 const themekitConfigFile = fs.readFileSync('config.yml', 'utf8')
@@ -15,7 +16,8 @@ const {
   width = 1300,
   height = 900,
   target = '',
-  urls = []
+  urls = [],
+  minify = false
 } = criticalConfig
 
 const penthouseOptions = {
@@ -30,6 +32,8 @@ async function shopifyCritical () {
   const criticalCSS = await extractCritical(urls, penthouseOptions)
 
   inlineCritical(target, criticalCSS, stylesheet)
+
+  replaceAsset(css, criticalCSS, minify)
 }
 
 module.exports = shopifyCritical
