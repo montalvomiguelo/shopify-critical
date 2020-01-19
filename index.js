@@ -23,8 +23,11 @@ const {
   env = ''
 } = criticalConfig
 
+const cssPath = path.join(base, css)
+const targetPath = path.join(base, target)
+
 const penthouseOptions = {
-  css,
+  css: cssPath,
   width,
   height
 }
@@ -36,9 +39,9 @@ async function shopifyCritical () {
   const config = themekitConfig[env]
   const criticalCSS = await extractCritical(urls, penthouseOptions)
 
-  inlineCritical(target, criticalCSS, stylesheet)
+  inlineCritical(targetPath, criticalCSS, stylesheet)
 
-  replaceAsset(css, criticalCSS, minify)
+  replaceAsset(cssPath, criticalCSS, minify)
 
   deploy(files, base, config, env)
 }
